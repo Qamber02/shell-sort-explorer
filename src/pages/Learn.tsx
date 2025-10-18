@@ -28,8 +28,8 @@ const Learn = () => {
   };
 
   return (
-    <div className="min-h-screen py-8 px-4">
-      <div className="container max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen py-12 px-4">
+      <div className="container max-w-7xl mx-auto space-y-12">
         {/* Header */}
         <div className="flex items-center justify-between">
           <Button

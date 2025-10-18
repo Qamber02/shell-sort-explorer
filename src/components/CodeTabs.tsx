@@ -1,31 +1,20 @@
 import { useState, useEffect } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { pythonCode, cppCode, javascriptCode } from '@/data/codeSamples';
+import { pythonCode } from '@/data/codeSamples';
+import { Code2 } from 'lucide-react';
 
 const CodeTabs = () => {
-  const [activeTab, setActiveTab] = useState('python');
-  const [highlightedCode, setHighlightedCode] = useState({
-    python: '',
-    cpp: '',
-    javascript: ''
-  });
+  const [highlightedCode, setHighlightedCode] = useState('');
 
   useEffect(() => {
-    // Dynamically import Prism and languages
     const loadPrism = async () => {
       try {
         const Prism = (await import('prismjs')).default;
         await import('prismjs/themes/prism-tomorrow.css');
         await import('prismjs/components/prism-python');
-        await import('prismjs/components/prism-clike');
-        await import('prismjs/components/prism-cpp');
-        await import('prismjs/components/prism-javascript');
 
-        setHighlightedCode({
-          python: Prism.highlight(pythonCode, Prism.languages.python, 'python'),
-          cpp: Prism.highlight(cppCode, Prism.languages.cpp, 'cpp'),
-          javascript: Prism.highlight(javascriptCode, Prism.languages.javascript, 'javascript')
-        });
+        setHighlightedCode(
+          Prism.highlight(pythonCode, Prism.languages.python, 'python')
+        );
       } catch (error) {
         console.error('Failed to load Prism:', error);
       }
@@ -35,53 +24,24 @@ const CodeTabs = () => {
   }, []);
 
   return (
-    <div className="gradient-card rounded-lg p-6 border border-border">
-      <h2 className="text-2xl font-bold mb-4 gradient-primary bg-clip-text text-transparent">
-        Code Implementation
-      </h2>
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3 bg-muted">
-          <TabsTrigger value="python" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-            Python
-          </TabsTrigger>
-          <TabsTrigger value="cpp" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-            C++
-          </TabsTrigger>
-          <TabsTrigger value="javascript" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-            JavaScript
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="python" className="mt-4">
-          <div className="relative rounded-lg overflow-hidden bg-card">
-            <pre className="!m-0 p-4 overflow-x-auto">
-              <code 
-                className="language-python text-sm"
-                dangerouslySetInnerHTML={{ __html: highlightedCode.python || pythonCode }}
-              />
-            </pre>
-          </div>
-        </TabsContent>
-        <TabsContent value="cpp" className="mt-4">
-          <div className="relative rounded-lg overflow-hidden bg-card">
-            <pre className="!m-0 p-4 overflow-x-auto">
-              <code 
-                className="language-cpp text-sm"
-                dangerouslySetInnerHTML={{ __html: highlightedCode.cpp || cppCode }}
-              />
-            </pre>
-          </div>
-        </TabsContent>
-        <TabsContent value="javascript" className="mt-4">
-          <div className="relative rounded-lg overflow-hidden bg-card">
-            <pre className="!m-0 p-4 overflow-x-auto">
-              <code 
-                className="language-javascript text-sm"
-                dangerouslySetInnerHTML={{ __html: highlightedCode.javascript || javascriptCode }}
-              />
-            </pre>
-          </div>
-        </TabsContent>
-      </Tabs>
+    <div className="gradient-card rounded-xl p-8 border border-border shadow-card hover:shadow-glow transition-smooth backdrop-blur-sm">
+      <div className="flex items-center gap-3 mb-6">
+        <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+          <Code2 className="w-5 h-5 text-primary" />
+        </div>
+        <h2 className="text-3xl font-bold gradient-primary bg-clip-text text-transparent">
+          Python Implementation
+        </h2>
+      </div>
+      <div className="relative rounded-xl overflow-hidden bg-card/50 border border-border/50 shadow-elegant">
+        <div className="absolute top-0 left-0 right-0 h-10 bg-gradient-to-b from-primary/5 to-transparent" />
+        <pre className="!m-0 p-6 overflow-x-auto">
+          <code 
+            className="language-python text-sm leading-relaxed"
+            dangerouslySetInnerHTML={{ __html: highlightedCode || pythonCode }}
+          />
+        </pre>
+      </div>
     </div>
   );
 };
